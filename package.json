@@ -1,23 +1,41 @@
 {
-  "name": "@medv/codejar",
+  "name": "codejar-compat",
   "version": "1.0.8",
-  "description": "An embeddable code editor for the browser",
+  "description": "CodeJar with multiple output formats (CJS, UMD & ESM)",
   "license": "MIT",
-  "repository": "antonmedv/codejar",
+  "repository": "remeic/codejar-compat",
   "author": "Anton Medvedev <anton@medv.io>",
-  "homepage": "https://medv.io/codejar/",
-  "main": "codejar.js",
-  "files": [
-    "*.ts",
-    "*.js"
+  "maintainers": [
+    "Giulio Fagioli <fagioli.giulio@gmail.com>",
+    "Anton Medvedev <anton@medv.io>"
   ],
+  "homepage": "https://medv.io/codejar/",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "source": "src/index.ts",
+  "main": "dist/codejar.js",
+  "module": "dist/codejar.module.js",
+  "unpkg": "dist/codejar.umd.js",
   "scripts": {
-    "start": "tsc -w",
-    "size": "minify codejar.js --sourceType module | gzip-size"
+    "build": "microbundle",
+    "dev": "microbundle watch",
+    "size": "echo \"gzip size: $(gzip-size $npm_package_main)\""
   },
   "devDependencies": {
-    "babel-minify": "^0.5.1",
     "gzip-size-cli": "^3.0.0",
+    "microbundle": "^0.12.0-next.8",
     "typescript": "^3.8.3"
+  },
+  "keywords": [
+    "codejar",
+    "editor",
+    "syntax",
+    "hilight",
+    "commonjs"
+  ],
+  "engines": {
+    "node": ">10"
   }
 }
