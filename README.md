@@ -10,7 +10,7 @@ In this repo i only bundle all files to serve CodeJar with different format
 
 ## Features
 
-* Lightweight (**2 kB** only)
+* Lightweight (**3.2 kB** only) | tree-shakeable
 * Multiple format CJS, UMD & ESM
 
 ## Getting Started
