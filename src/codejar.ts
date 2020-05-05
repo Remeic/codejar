@@ -389,6 +389,15 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement) => void
   }
 
   function insert(text: string) {
+<<<<<<< HEAD:src/codejar.ts
+=======
+    text = text
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;")
+>>>>>>> bf380ec4ae7921957f0e92816499e667bde6be73:codejar.ts
     document.execCommand("insertHTML", false, text)
   }
 

@@ -1,6 +1,6 @@
 {
   "name": "codejar-compat",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "CodeJar with multiple output formats (CJS, UMD & ESM)",
   "license": "MIT",
   "repository": "remeic/codejar-compat",
