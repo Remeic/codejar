@@ -18,7 +18,7 @@
   "main": "dist/codejar.js",
   "module": "dist/codejar.module.js",
   "unpkg": "dist/codejar.umd.js",
-  "types": "codejar.d.ts",
+  "types": "dist/codejar.d.ts",
   "scripts": {
     "build": "microbundle",
     "dev": "microbundle watch",
