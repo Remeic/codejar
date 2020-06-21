@@ -1,6 +1,6 @@
 {
   "name": "codejar-compat",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "CodeJar with multiple output formats (CJS, UMD & ESM)",
   "license": "MIT",
   "repository": "remeic/codejar-compat",
@@ -18,6 +18,7 @@
   "main": "dist/codejar.js",
   "module": "dist/codejar.module.js",
   "unpkg": "dist/codejar.umd.js",
+  "types": "codejar.d.ts",
   "scripts": {
     "build": "microbundle",
     "dev": "microbundle watch",

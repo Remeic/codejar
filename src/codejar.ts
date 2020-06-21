@@ -13,6 +13,8 @@ type Position = {
   dir?: "->" | "<-"
 }
 
+export type CodeJar = ReturnType<typeof CodeJar>
+
 export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement) => void, opt: Partial<Options> = {}) {
   const options = {
     tab: "\t",
@@ -218,12 +220,12 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement) => void
       }
 
       if (isFirefox) {
-        event.preventDefault()
+        preventDefault(event)
         insert("\n" + newLinePadding)
       } else {
         // Normal browsers
         if (newLinePadding.length > 0) {
-          event.preventDefault()
+          preventDefault(event)
           insert("\n" + newLinePadding)
         }
       }
@@ -243,12 +245,12 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement) => void
     const codeAfter = afterCursor()
     if (close.includes(event.key) && codeAfter.substr(0, 1) === event.key) {
       const pos = save()
-      event.preventDefault()
+      preventDefault(event)
       pos.start = ++pos.end
       restore(pos)
     } else if (open.includes(event.key)) {
       const pos = save()
-      event.preventDefault()
+      preventDefault(event)
       const text = event.key + close[open.indexOf(event.key)]
       insert(text)
       pos.start = ++pos.end
@@ -258,7 +260,7 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement) => void
 
   function handleTabCharacters(event: KeyboardEvent) {
     if (event.key === "Tab") {
-      event.preventDefault()
+      preventDefault(event)
       if (event.shiftKey) {
         const before = beforeCursor()
         let [padding, start,] = findPadding(before)
@@ -280,7 +282,7 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement) => void
 
   function handleJumpToBeginningOfLine(event: KeyboardEvent) {
     if (event.key === "ArrowLeft" && event.metaKey) {
-      event.preventDefault()
+      preventDefault(event)
       const before = beforeCursor()
       let [padding, start, end] = findPadding(before)
       if (before.endsWith(padding)) {
@@ -303,7 +305,7 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement) => void
 
   function handleUndoRedo(event: KeyboardEvent) {
     if (isUndo(event)) {
-      event.preventDefault()
+      preventDefault(event)
       at--
       const record = history[at]
       if (record) {
@@ -313,7 +315,7 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement) => void
       if (at < 0) at = 0
     }
     if (isRedo(event)) {
-      event.preventDefault()
+      preventDefault(event)
       at++
       const record = history[at]
       if (record) {
@@ -349,7 +351,7 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement) => void
   }
 
   function handlePaste(event: ClipboardEvent) {
-    event.preventDefault()
+    preventDefault(event)
     const text = ((event as any).originalEvent || event).clipboardData.getData("text/plain")
     const pos = save()
     insert(text)
@@ -422,6 +424,10 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement) => void
 
   function toString() {
     return editor.textContent || ""
+  }
+
+  function preventDefault(event: Event) {
+    event.preventDefault()
   }
 
   return {
