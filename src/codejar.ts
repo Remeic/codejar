@@ -1,5 +1,6 @@
 type Options = {
   tab: string
+  indentOn: RegExp
 }
 
 type HistoryRecord = {
@@ -16,8 +17,9 @@ type Position = {
 export type CodeJar = ReturnType<typeof CodeJar>
 
 export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement) => void, opt: Partial<Options> = {}) {
-  const options = {
+  const options: Options = {
     tab: "\t",
+    indentOn: /{$/,
     ...opt
   }
   let listeners: [string, any][] = []
@@ -70,7 +72,6 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement) => void
     prev = toString()
     handleNewLine(event)
     handleTabCharacters(event)
-    handleJumpToBeginningOfLine(event)
     handleSelfClosingCharacters(event)
     handleUndoRedo(event)
     if (shouldRecord(event) && !recording) {
@@ -215,7 +216,8 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement) => void
       let newLinePadding = padding
 
       // If last symbol is "{" ident new line
-      if (before[before.length - 1] === "{") {
+      // Allow user defines indent rule
+      if (options.indentOn.test(before)) {
         newLinePadding += options.tab
       }
 
@@ -276,29 +278,6 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement) => void
         }
       } else {
         insert(options.tab)
-      }
-    }
-  }
-
-  function handleJumpToBeginningOfLine(event: KeyboardEvent) {
-    if (event.key === "ArrowLeft" && event.metaKey) {
-      preventDefault(event)
-      const before = beforeCursor()
-      let [padding, start, end] = findPadding(before)
-      if (before.endsWith(padding)) {
-        if (event.shiftKey) {
-          const pos = save()
-          restore({start, end: pos.end}) // Select from line start.
-        } else {
-          restore({start, end: start}) // Jump to line start.
-        }
-      } else {
-        if (event.shiftKey) {
-          const pos = save()
-          restore({start: end, end: pos.end}) // Select from beginning of text.
-        } else {
-          restore({start: end, end}) // Jump to beginning of text.
-        }
       }
     }
   }
