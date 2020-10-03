@@ -1,6 +1,8 @@
 type Options = {
   tab: string
   indentOn: RegExp
+  spellcheck: boolean
+  addClosing: boolean
 }
 
 type HistoryRecord = {
@@ -20,6 +22,8 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement) => void
   const options: Options = {
     tab: "\t",
     indentOn: /{$/,
+    spellcheck: false,
+    addClosing: true,
     ...opt
   }
   let listeners: [string, any][] = []
@@ -31,7 +35,7 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement) => void
   let isFirefox = navigator.userAgent.toLowerCase().indexOf("firefox") > -1
 
   editor.setAttribute("contentEditable", isFirefox ? "true" : "plaintext-only")
-  editor.setAttribute("spellcheck", "false")
+  editor.setAttribute("spellcheck", options.spellcheck ? "true" : "false")
   editor.style.outline = "none"
   editor.style.overflowWrap = "break-word"
   editor.style.overflowY = "auto"
@@ -72,7 +76,7 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement) => void
     prev = toString()
     handleNewLine(event)
     handleTabCharacters(event)
-    handleSelfClosingCharacters(event)
+    if (options.addClosing) handleSelfClosingCharacters(event)
     handleUndoRedo(event)
     if (shouldRecord(event) && !recording) {
       recordHistory()
